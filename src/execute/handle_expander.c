@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_expander.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabu-shr <rabu-shr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jalqam <jalqam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 18:00:36 by jalqam            #+#    #+#             */
-/*   Updated: 2025/05/21 13:55:45 by rabu-shr         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:47:55 by jalqam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,13 @@
 // 	dollar_expansion = 0;
 // 	while (value[i])
 // 	{
-// 		if (value[i] == '\'' && value[i + 1] && value[i + 1] == '$' && !inside_double)
+// 		if (value[i] == '\'' && value[i + 1] && value[i + 1] == '$'
+				// && !inside_double)
 // 		{
 // 			if (append_char_to_result(&result, value[i++]))
 // 				return (NULL);
 // 			dollar_expansion = 1;
-// 			continue;
+// 			continue ;
 // 		}
 // 		else if (value[i] == '\'' && !inside_double)
 // 		{
@@ -58,7 +59,7 @@
 // 				inside_single = !inside_single;
 // 				if (append_char_to_result(&result, value[i++]))
 // 					return (NULL);
-// 				continue;
+// 				continue ;
 // 			}
 // 			dollar_expansion = 0;
 // 		}
@@ -66,7 +67,7 @@
 // 		{
 // 			inside_double = !inside_double;
 // 			i++;
-// 			continue;
+// 			continue ;
 // 		}
 // 		if (append_char_to_result(&result, value[i++]))
 // 			return (NULL);

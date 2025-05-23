@@ -6,7 +6,7 @@
 /*   By: jalqam <jalqam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 13:09:31 by jalqam            #+#    #+#             */
-/*   Updated: 2025/05/19 16:07:37 by jalqam           ###   ########.fr       */
+/*   Updated: 2025/05/21 19:17:53 by jalqam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	signal_nnl(int sig)
 	g_signals_status = sig;
 	write(1, "\n", 1);
 }
+
 void	signal_red(int sig)
 {
 	g_signals_status = sig;

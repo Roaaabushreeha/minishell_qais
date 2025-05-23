@@ -6,7 +6,7 @@
 /*   By: jalqam <jalqam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:59:47 by jalqam            #+#    #+#             */
-/*   Updated: 2025/05/20 16:42:30 by jalqam           ###   ########.fr       */
+/*   Updated: 2025/05/21 19:11:32 by jalqam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,46 +93,41 @@ static int	handle_wait_status(t_env *env, int status)
 int	execute_commands_pip(t_cmd *cmd, t_env *env, t_token *tokens,
 		int prev_pipe[2])
 {
-	int			fd[2];
 	t_cmd		*temp;
-	int			i;
 	int			error;
 	t_pipe_fds	pipes;
+	t_fork_data	fork_data;
 
-	i = 0;
+	fork_data.index = 0;
 	temp = cmd;
-	while (i < cmd->cmd_count && temp)
+	while (fork_data.index < cmd->cmd_count && temp)
 	{
-		fd[0] = -1;
-		fd[1] = -1;
-		if (setup_pipe(fd, i, cmd->cmd_count))
+		fork_data.fd[0] = -1;
+		fork_data.fd[1] = -1;
+		if (setup_pipe(fork_data.fd, fork_data.index, cmd->cmd_count))
 		{
 			close_prev_pipe(prev_pipe);
 			cleanup_and_exit(tokens, cmd, env, 1);
 			return (1);
 		}
-		t_fork_data fork_data;
 		fork_data.cmd = temp;
-		fork_data.fd[0] = fd[0];
-		fork_data.fd[1] = fd[1];
 		fork_data.prev_pipe = prev_pipe;
 		fork_data.env = env;
-		fork_data.index = i;
 		fork_data.tokens = tokens;
 		error = init_fork(&fork_data);
 		if (error)
 		{
-			pipes.fd[0] = fd[0];
-			pipes.fd[1] = fd[1];
+			pipes.fd[0] = fork_data.fd[0];
+			pipes.fd[1] = fork_data.fd[1];
 			pipes.prev_pipe[0] = prev_pipe[0];
 			pipes.prev_pipe[1] = prev_pipe[1];
 			return (handle_fork_error(cmd, env, tokens, &pipes));
 		}
-		update_pipes(fd, prev_pipe, i == cmd->cmd_count - 1);
+		update_pipes(fork_data.fd, prev_pipe, fork_data.index == cmd->cmd_count - 1);
 		temp = temp->next;
-		i++;
+		fork_data.index++;
 	}
-	return (i);
+	return (fork_data.index);
 }
 
 int	get_cmd_execution(t_cmd *cmd, t_env *env, t_token *tokens)

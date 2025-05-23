@@ -6,7 +6,7 @@
 /*   By: jalqam <jalqam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 12:59:42 by rabu-shr          #+#    #+#             */
-/*   Updated: 2025/05/20 20:25:04 by jalqam           ###   ########.fr       */
+/*   Updated: 2025/05/21 19:14:57 by jalqam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	handle_pipe_redirection(t_cmd *cmd, int *fd)
 {
 	if (!fd)
 		return ;
-	close(fd[0]);  // Always close read end of current pipe
+	close(fd[0]);
 	if (cmd->next && cmd->fd_out == -1)
 	{
 		if (dup2(fd[1], STDOUT_FILENO) == -1)
@@ -113,8 +113,8 @@ int	child_process(t_cmd *cmd, t_env *env, int *fd, t_token *tokens)
 
 	flag = 0;
 	ret = 0;
-	handle_pipe_redirection(cmd, fd);  // Handle pipes first
-	handle_io_redirection(cmd);  // Then handle redirections to override if needed
+	handle_pipe_redirection(cmd, fd);
+	handle_io_redirection(cmd);      
 	if (is_builtin_commands(cmd))
 	{
 		ret = builtin_commands(cmd, env, &flag);

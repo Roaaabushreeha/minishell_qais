@@ -3,78 +3,76 @@
 /*                                                        :::      ::::::::   */
 /*   expander_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabu-shr <rabu-shr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jalqam <jalqam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 18:03:34 by jalqam            #+#    #+#             */
-/*   Updated: 2025/05/21 15:51:40 by rabu-shr         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:02:38 by jalqam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+char	*handle_twoquotes(t_token *token)
+{
+	char	*str;
+	char	*result;
+	int		i;
+	int		j;
 
-// int is_expandable(char *str, int i, int in_squotes)
-// {
-//     return (str[i] == '$' && str[i + 1] && !in_squotes);
-// }
+	str = ft_strdup(token->value);
+	if (!str)
+		return (NULL);
+	result = malloc(ft_strlen(str) + 1);
+	if (!result)
+	{
+		free(str);
+		return (NULL);
+	}
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] == '"' && (i == 0 || str[i - 1] != '\\'))
+			copy_inside_quotes(str, result, &i, &j);
+		else
+			copy_outside_quotes(str, result, &i, &j);
+	}
+	result[j] = '\0';
+	free(str);
+	return (result);
+}
 
-// int handle_and_expand(char *str, int *i, char **result, t_env *env, int *quotes)
-// {
-//     if (handle_special_param(str, i, result, env))  // renamed here
-//         return (1);
-//     if (ft_isalpha(str[*i + 1]) || str[*i + 1] == '_' || str[*i + 1] == '$')
-//         return expand_env_var(str, i, result, env, quotes[1]);
-//     return (0);
-// }
+char	*handle_onequote_expander(t_token *token)
+{
+	char	*result;
+	char	*value;
+	int		i;
+	int		inside_quotes;
 
-// int append_char_to_result_q(char **result, char c)
-// {
-//     char *temp;
-//     temp = *result;
-//     *result = ft_strjoin_char(*result, c);
-//     free(temp);
-//     return (*result != NULL);
-// }
+	if (!token || !token->value)
+		return (NULL);
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	value = token->value;
+	inside_quotes = 0;
+	i = 0;
+	while (value[i])
+	{
+		if (value[i] == '\'')
+		{
+			inside_quotes = !inside_quotes;
+			i++;
+			continue ;
+		}
+		append_char_to_result(result, value[i]);
+		i++;
+	}
+	return (result);
+}
 
-// int process_dollar_expansion(char *str, int *i, char **result, t_env *env, int *quotes)
-// {
-//     if (is_expandable(str, *i, quotes[0]))
-//     {
-//         if (handle_and_expand(str, i, result, env, quotes))
-//             return (1);
-//     }
-//     return (0);
-// }
-
-// char *handle_dollar_expander(t_token *token, t_env *env)
-// {
-//     char *result;
-//     char *str;
-//     int i;
-//     int quotes[2];
-
-//     quotes[0] = 0;
-//     quotes[1] = 0;
-//     result = ft_strdup("");
-//     if (!result)
-//         return (NULL);
-//     str = token->value;
-//     i = 0;
-//     while (str[i])
-//     {
-//         if (toggle_quotes(str[i], &quotes[0], &quotes[1]))
-//         {
-//             if (!append_char_to_result_q(&result, str[i++]))
-//                 return (NULL);
-//             continue;
-//         }
-//         if (process_dollar_expansion(str, &i, &result, env, quotes))
-//             continue;
-        
-//         // Use append_char_to_result as declared (returns new pointer)
-//         result = append_char_to_result(result, str[i++]);
-//         if (!result)
-//             return (NULL);
-//     }
-//     return (result);
-// }
+void	skip_leading_spaces(char *str, int *i)
+{
+	while (str[*i] && (str[*i] == ' ' || str[*i] == '\t'))
+		(*i)++;
+}

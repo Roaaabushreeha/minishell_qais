@@ -47,8 +47,8 @@ int	init_fork(t_fork_data *fork_data)
 	if (temp->pid == 0)
 	{
 		handle_child_pipes(fork_data);
-		error = child_process(fork_data->cmd, fork_data->env,
-				NULL, fork_data->tokens);
+		error = child_process(fork_data->cmd, fork_data->env, NULL,
+				fork_data->tokens);
 		if (error)
 			cleanup_and_exit(fork_data->tokens, temp, fork_data->env, 126);
 	}

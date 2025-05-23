@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_process.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabu-shr <rabu-shr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jalqam <jalqam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 15:54:59 by rabu-shr          #+#    #+#             */
-/*   Updated: 2025/05/20 18:20:28 by rabu-shr         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:13:03 by jalqam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,20 +108,6 @@ int	handle_heredoc(char *delimiter, t_cmd *cmd, t_env *env)
 	result = process_heredoc_input(fd_heredoc, clean_delim, quoted, env);
 	free(clean_delim);
 	close(fd_heredoc);
-	if (result || g_signals_status == 130)
-	{
-		if (g_signals_status == 130)
-		{
-			env->exit_status = g_signals_status;
-			g_signals_status = 0;
-		}
-		if (cmd->temp)
-		{
-			unlink(cmd->temp);
-			free(cmd->temp);
-			cmd->temp = NULL;
-		}
-		return (1);
-	}
-	return (0);
+
+	return (finalize_heredoc(cmd, env, result));
 }

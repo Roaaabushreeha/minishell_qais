@@ -6,7 +6,7 @@
 /*   By: falhaimo <falhaimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:46:28 by jalqam            #+#    #+#             */
-/*   Updated: 2025/05/21 17:12:06 by falhaimo         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:16:27 by falhaimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,22 +74,22 @@ char	*ft_strjoin_char(char *str, char c)
 	return (result);
 }
 
-char *get_exit_status(t_env *env)
+char	*get_exit_status(t_env *env)
 {
-	char *status;
+	char	*status;
 
 	if (g_signals_status)
 	{
 		if (g_signals_status == SIGQUIT)
 			status = ft_itoa(131);
 		else
-			status = ft_itoa(130);  
-		g_signals_status = 0;  
-		env->exit_status = 0;   
+			status = ft_itoa(130);
+		g_signals_status = 0;
+		env->exit_status = 0;
 	}
 	else
 	{
-		status = ft_itoa(env->exit_status);  
+		status = ft_itoa(env->exit_status);
 	}
 	return (status);
 }

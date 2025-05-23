@@ -36,4 +36,3 @@ char	*handle_dollar_param(char *str, int *i)
 	}
 	return (NULL);
 }
-
